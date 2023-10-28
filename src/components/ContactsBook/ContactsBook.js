@@ -16,6 +16,19 @@ class ContactsBook extends Component {
   };
 
 
+  componentDidMount() {
+    if (localStorage.getItem('contacts')) {
+      this.setState({contacts: JSON.parse(localStorage.getItem('contacts'))})
+    };
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.contact?.length !== JSON.parse(localStorage.getItem('contacts'))) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
+  }
+
   contactSubmitHandler = data => {
     const { name, number } = data;
     if (this.state.contacts.find((contact) => contact.name === name || contact.number === number)) {
@@ -39,8 +52,6 @@ class ContactsBook extends Component {
   };
 
   handlerDeleteContact = (id) => {
-    console.log(id);
-    // const id = event.currentTarget.dataset.id;
 
     this.setState(prevState => {
       const newContactsList =
